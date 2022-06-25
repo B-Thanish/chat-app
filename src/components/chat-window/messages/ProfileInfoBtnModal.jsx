@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react/function-component-definition */
 import React from 'react';
 import { Button, Modal } from 'rsuite';
@@ -20,7 +21,7 @@ const ProfileInfoBtnModal = ({ profile, children, ...btnProps }) => {
       </Button>
       <Modal show={isOpen} onHide={close}>
         <Modal.Header>
-          <Modal.Title>{shortName} profile</Modal.Title>
+          <Modal.Title>{shortName}'s profile</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
           <ProfileAvatar
@@ -35,7 +36,7 @@ const ProfileInfoBtnModal = ({ profile, children, ...btnProps }) => {
         </Modal.Body>
         <Modal.Footer>
           {children}
-          <Button block onClick={close}>
+          <Button block onClick={close} color="blue">
             Close
           </Button>
         </Modal.Footer>

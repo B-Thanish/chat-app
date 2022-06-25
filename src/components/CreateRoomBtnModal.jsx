@@ -100,7 +100,12 @@ const CreateRoomBtnModal = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button block="primary" onClick={onSubmit} disabled={isLoading}>
+          <Button
+            block="primary"
+            onClick={onSubmit}
+            disabled={isLoading}
+            color="blue"
+          >
             Create new chat room
           </Button>
         </Modal.Footer>

@@ -1,7 +1,7 @@
 /* eslint-disable react/function-component-definition */
 import React, { memo } from 'react';
 import { useParams } from 'react-router';
-import { Alert, Button, Drawer } from 'rsuite';
+import { Alert, Button, Drawer, Icon } from 'rsuite';
 import { useCurrentRoom } from '../../../context/current-room.context';
 import { useMediaQuery, useModalState } from '../../../misc/custom-hooks';
 import { database } from '../../../misc/firebase';
@@ -38,8 +38,8 @@ const EditRoomBtnDrawer = () => {
 
   return (
     <div>
-      <Button className="br-circle" size="sm" color="red" onClick={open}>
-        A
+      <Button className="br-circle" size="sm" color="yellow" onClick={open}>
+        <Icon icon="edit" />
       </Button>
 
       <Drawer full={isMobile} show={isOpen} onHide={close} placement="right">
@@ -63,7 +63,7 @@ const EditRoomBtnDrawer = () => {
           />
         </Drawer.Body>
         <Drawer.Footer>
-          <Button block onClick={close}>
+          <Button block onClick={close} color="blue">
             Close
           </Button>
         </Drawer.Footer>
