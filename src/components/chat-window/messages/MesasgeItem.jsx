@@ -12,7 +12,7 @@ import ImgBtnModal from './ImgBtnModal';
 import ProfileInfoBtnModal from './ProfileInfoBtnModal';
 
 const renderFileMessage = file => {
-  if (file.contentType.includes('images')) {
+  if (file.contentType.includes('image')) {
     return (
       <div className="height-220">
         <ImgBtnModal src={file.url} fileName={file.name} />
