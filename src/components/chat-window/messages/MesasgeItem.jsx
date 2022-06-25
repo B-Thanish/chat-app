@@ -8,10 +8,23 @@ import { auth } from '../../../misc/firebase';
 import PresenceDot from '../../PresenceDot';
 import ProfileAvatar from '../../ProfileAvatar';
 import IconBtnControl from './IconBtnControl';
+import ImgBtnModal from './ImgBtnModal';
 import ProfileInfoBtnModal from './ProfileInfoBtnModal';
 
+const renderFileMessage = file => {
+  if (file.contentType.includes('images')) {
+    return (
+      <div className="height-220">
+        <ImgBtnModal src={file.url} fileName={file.name} />
+      </div>
+    );
+  }
+
+  return <a href={file.url}>Download {file.name}</a>;
+};
+
 const MesasgeItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
-  const { author, createdAt, text, likes, likeCount } = message;
+  const { author, createdAt, text, file, likes, likeCount } = message;
 
   const [selfRef, isHovered] = useHover();
   const isMobile = useMediaQuery('(max-width: 992px)');
@@ -21,7 +34,7 @@ const MesasgeItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
 
   const isMsgAuthorAdmin = admins.includes(author.uid);
   const isAuthor = auth.currentUser.uid === author.uid;
-  const canGrandAdmin = isAdmin && !isAuthor;
+  const canGrantAdmin = isAdmin && !isAuthor;
 
   const canShowIcons = isMobile || isHovered;
   const isLiked = likes && Object.keys(likes).includes(auth.currentUser.uid);
@@ -45,7 +58,7 @@ const MesasgeItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
           appearance="link"
           className="p-0 ml-1 text-black"
         >
-          {canGrandAdmin && (
+          {canGrantAdmin && (
             <Button block onClick={() => handleAdmin(author.uid)} color="blue">
               {isMsgAuthorAdmin
                 ? 'Remove admin permission'
@@ -78,7 +91,8 @@ const MesasgeItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
       </div>
 
       <div>
-        <span className="word-break-all">{text}</span>
+        {text && <span className="word-break-all">{text}</span>}
+        {file && renderFileMessage(file)}
       </div>
     </li>
   );
