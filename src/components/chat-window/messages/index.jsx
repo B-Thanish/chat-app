@@ -69,7 +69,7 @@ const Messages = () => {
     loadMessages();
     setTimeout(() => {
       node.scrollTop = node.scrollHeight;
-    }, 200);
+    }, 500);
 
     return () => {
       messagesRef.off('value');

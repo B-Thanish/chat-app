@@ -39,7 +39,7 @@ const EditRoomBtnDrawer = () => {
   return (
     <div>
       <Button className="br-circle" size="sm" color="yellow" onClick={open}>
-        <Icon icon="edit" />
+        <Icon icon="edit2" />
       </Button>
 
       <Drawer full={isMobile} show={isOpen} onHide={close} placement="right">

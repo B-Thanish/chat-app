@@ -69,7 +69,7 @@ const MesasgeItem = ({ message, handleAdmin, handleLike, handleDelete }) => {
           className="p-0 ml-1 text-black"
         >
           {canGrantAdmin && (
-            <Button block onClick={() => handleAdmin(author.uid)} color="blue">
+            <Button block onClick={() => handleAdmin(author.uid)} color="green">
               {isMsgAuthorAdmin
                 ? 'Remove admin permission'
                 : 'Give admin in the room'}
