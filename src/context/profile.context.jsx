@@ -3,7 +3,7 @@
 /* eslint-disable react/function-component-definition */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import firebase from 'firebase/app';
-import { auth, database, messaging } from '../misc/firebase';
+import { auth, database, fcmVapidKey, messaging } from '../misc/firebase';
 
 export const isOfflineForDatabase = {
   state: 'offline',
@@ -24,7 +24,6 @@ export const ProfileProvider = ({ children }) => {
   useEffect(() => {
     let userRef;
     let userStatusRef;
-    let tokenRefreshUnsub;
 
     const authUnsub = auth.onAuthStateChanged(async authObj => {
       if (authObj) {
@@ -46,7 +45,7 @@ export const ProfileProvider = ({ children }) => {
         });
 
         database.ref('.info/connected').on('value', snapshot => {
-          if (snapshot.val() === false) {
+          if (!!snapshot.val() === false) {
             return;
           }
 
@@ -60,7 +59,9 @@ export const ProfileProvider = ({ children }) => {
 
         if (messaging) {
           try {
-            const currentToken = await messaging.getToken();
+            const currentToken = await messaging.getToken({
+              vapidKey: fcmVapidKey,
+            });
             if (currentToken) {
               await database
                 .ref(`/fcm_tokens/${currentToken}`)
@@ -69,37 +70,20 @@ export const ProfileProvider = ({ children }) => {
           } catch (err) {
             console.log('An error occured while retrieving token. ', err);
           }
-
-          tokenRefreshUnsub = messaging.onTokenRefresh(async () => {
-            try {
-              const currentToken = await messaging.getToken();
-              if (currentToken) {
-                await database
-                  .ref(`/fcm_tokens/${currentToken}`)
-                  .set(authObj.uid);
-              }
-            } catch (err) {
-              console.log('An error occured while retrieving token. ', err);
-            }
-          });
-        } else {
-          if (userRef) {
-            userRef.off();
-          }
-
-          if (userStatusRef) {
-            userStatusRef.off();
-          }
-
-          if (tokenRefreshUnsub) {
-            tokenRefreshUnsub();
-          }
-
-          database.ref('.info/connected').off();
-
-          setProfile(null);
-          setIsLoading(false);
         }
+      } else {
+        if (userRef) {
+          userRef.off();
+        }
+
+        if (userStatusRef) {
+          userStatusRef.off();
+        }
+
+        database.ref('.info/connected').off();
+
+        setProfile(null);
+        setIsLoading(false);
       }
     });
 
@@ -110,10 +94,6 @@ export const ProfileProvider = ({ children }) => {
 
       if (userRef) {
         userRef.off();
-      }
-
-      if (tokenRefreshUnsub) {
-        tokenRefreshUnsub();
       }
 
       if (userStatusRef) {
