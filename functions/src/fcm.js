@@ -19,7 +19,7 @@ exports.sendFcm = functions.https.onCall(async (data, context) => {
 
   checkIfAllowed(context, transformToArr(roomData.admins));
 
-  const fcmUsers = transformToArr(roomData.fcmUser);
+  const fcmUsers = transformToArr(roomData.fcmUsers);
   const userTokensPromises = fcmUsers.map(uid => getUserTokens(uid));
   const userTokensResult = await Promise.all(userTokensPromises);
 
@@ -37,7 +37,7 @@ exports.sendFcm = functions.https.onCall(async (data, context) => {
       title: `${title} (${roomData.name})`,
       body: message,
     },
-    tokens: registrationTokens,
+    tokens,
   };
 
   const batchResponse = await messaging.sendMulticast(fcmMessage);
@@ -46,7 +46,7 @@ exports.sendFcm = functions.https.onCall(async (data, context) => {
   if (batchResponse.failureCount > 0) {
     batchResponse.responses.forEach((resp, idx) => {
       if (!resp.success) {
-        failedTokens.push(registrationTokens[idx]);
+        failedTokens.push(tokens[idx]);
       }
     });
   }
@@ -62,7 +62,7 @@ function checkIfAuth(context) {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'unauthenticated',
-      'You have to signed in'
+      'You have to be signed in'
     );
   }
 }
