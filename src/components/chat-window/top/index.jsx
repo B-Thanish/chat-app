@@ -6,6 +6,7 @@ import { useCurrentRoom } from '../../../context/current-room.context';
 import { useMediaQuery } from '../../../misc/custom-hooks';
 import EditRoomBtnDrawer from './EditRoomBtnDrawer';
 import RoomInfoBtnModal from './RoomInfoBtnModal';
+import SendFcmBtnModal from './SendFcmBtnModal';
 
 const Top = () => {
   const name = useCurrentRoom(v => v.name);
@@ -36,7 +37,7 @@ const Top = () => {
       </div>
 
       <div className="d-flex justify-content-between align-items-center">
-        <span>todo</span>
+        {isAdmin && <SendFcmBtnModal />}
         <RoomInfoBtnModal />
       </div>
     </div>
