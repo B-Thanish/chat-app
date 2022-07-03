@@ -94,7 +94,8 @@ const SendFcmBtnModal = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            block="primary"
+            block
+            appearance="primary"
             onClick={onSubmit}
             disabled={isLoading}
             color="blue"
